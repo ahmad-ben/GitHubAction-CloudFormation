@@ -32,5 +32,3 @@ jobs:
           --query 'Stacks[0].Outputs' \
           --output table \
           --region us-east-1 # Replace with your desired AWS region
-    capabilities:
-      - CAPABILITY_NAMED_IAM
