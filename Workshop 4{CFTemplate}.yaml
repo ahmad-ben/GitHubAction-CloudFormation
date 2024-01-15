@@ -4,8 +4,7 @@ Resources:
   MyS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: test0ttoow415
-      
+      BucketName: test0ttoow415 #The name of the S3 Bucket
 
   MyLambdaRole:
     Type: AWS::IAM::Role
@@ -23,7 +22,7 @@ Resources:
   MyLambdaFunction1:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: testfun00001
+      FunctionName: testfun00001 #The name of the Lambda function
       Code:
         ZipFile: |
           import csv
