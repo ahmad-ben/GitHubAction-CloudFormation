@@ -1,34 +1,27 @@
-name: DeployCloudFormation
-on:
+name: 'Deploy to AWS CloudFormation'
+
+on: 
   push:
-    branches:
-      - main
+    branches: [ main ]
+  
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: CheckoutRepository
+      - name: Checkout code from master branch
         uses: actions/checkout@v2
-      - name: ConfigureAWSCLI
-        run: >
-          echo "[default]
 
-          aws_access_key_id=${{secrets.AWS_ACCESS_KEY_ID}}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.ACCESS_KEY_SECRET }}
+          aws-region: us-east-1
 
-          aws_secret_access_key=${{secrets.AWS_SECRET_ACCESS_KEY}}" > ~/.aws/credentials
-      - name: DeployCloudFormationStack
-        run: |
-          aws cloudformation create-stack --stack-name MyStackName \
-          --template-body file://Workshop 4{CFTemplate}.yaml \
-          --region us-east-1 # Replace with your desired AWS region
-      - name: WaitforStacktoComplete
-        run: >
-          aws cloudformation wait stack-create-complete --stack-name MyStackName \
-
-          --region us-east-1 # Replace with your desired AWS region
-      - name: DisplayStackOutputs
-        run: |
-          aws cloudformation describe-stacks --stack-name MyStackName \
-          --query 'Stacks[0].Outputs' \
-          --output table \
-          --region us-east-1 # Replace with your desired AWS region
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: tekloon-test-stack
+          template: Workshop 4{CFTemplate}.yaml
+          no-fail-on-empty-changeset: "1"
