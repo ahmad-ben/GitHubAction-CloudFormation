@@ -1,40 +1,36 @@
 name: DeployCloudFormation
-
 on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: CheckoutRepository
         uses: actions/checkout@v2
-
       - name: ConfigureAWSCLI
-        run: |
+        run: >
           echo "[default]
-          aws_access_key_id=${{secrets.AWS_ACCESS_KEY_ID}}
-          aws_secret_access_key=${{secrets.AWS_SECRET_ACCESS_KEY}}" > ~/.aws/credentials
 
+          aws_access_key_id=${{secrets.AWS_ACCESS_KEY_ID}}
+
+          aws_secret_access_key=${{secrets.AWS_SECRET_ACCESS_KEY}}" > ~/.aws/credentials
       - name: DeployCloudFormationStack
         run: |
           aws cloudformation create-stack --stack-name MyStackName \
           --template-body file://Workshop 4{CFTemplate}.yaml \
           --region us-east-1 # Replace with your desired AWS region
-
       - name: WaitforStacktoComplete
-        run: |
+        run: >
           aws cloudformation wait stack-create-complete --stack-name MyStackName \
-          --region us-east-1 # Replace with your desired AWS region
 
+          --region us-east-1 # Replace with your desired AWS region
       - name: DisplayStackOutputs
         run: |
           aws cloudformation describe-stacks --stack-name MyStackName \
           --query 'Stacks[0].Outputs' \
           --output table \
           --region us-east-1 # Replace with your desired AWS region
-
-    capabilities: 
+    capabilities:
       - CAPABILITY_NAMED_IAM
