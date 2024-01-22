@@ -26,4 +26,4 @@ jobs:
           template: Workshop 4{CFTemplate}.yaml
           no-fail-on-empty-changeset: "1"
 
-#Test Again
+#The other template doesn't work 😢.
